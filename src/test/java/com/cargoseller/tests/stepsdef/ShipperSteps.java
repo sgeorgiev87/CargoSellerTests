@@ -1,5 +1,6 @@
 package com.cargoseller.tests.stepsdef;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
@@ -30,10 +31,11 @@ public class ShipperSteps extends CargoSellerTest {
 	private MyProfile myProfile;
 	private PostAProject postAProject;
 	private Freelancers freelancers;
+	Browser browser = new Browser();
 	
 	@Before
-	public void setup() {
-		Browser.init();
+	public void setup() throws IOException {
+		browser.init();
 		testID = Tools.generateRandomNumbers(5);
 	}
 
