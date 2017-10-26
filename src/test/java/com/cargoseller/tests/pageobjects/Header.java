@@ -1,6 +1,5 @@
 package com.cargoseller.tests.pageobjects;
 
-import org.junit.Assert;
 import org.openqa.selenium.By;
 
 import com.cargoseller.tests.browser.*;
@@ -15,6 +14,7 @@ public class Header {
 		Browser.instance.findElement(By.name("user_pass")).sendKeys(Credentials.getPassword(role.getUsername()));
 		Browser.instance.findElement(By.xpath("//div[@class='fre-input-field']/button")).click();
 		return new Homepage();
+		
 	}
 	
 	public PostAProject goToPostAProject() throws Exception {

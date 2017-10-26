@@ -1,0 +1,18 @@
+# This is a sample build configuration for Java (Maven).
+# Check our guides at https://confluence.atlassian.com/x/zd-5Mw for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: maven:3.3.9
+
+pipelines:
+  custom:
+    default:
+    - step:
+        caches:
+          - maven
+        script: # Modify the commands below to build your repository.
+          - echo ${key} | base64 --decode > ~/.ssh/id_rsa
+          - chmod 600 ~/.ssh/id_rsa
+          - ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa georgibu@181.224.135.145 -p 18765 'sh cargoseller_testing_config/updateCargosellerCITest.sh master no'
+          - mvn -B verify # -B batch mode makes Maven less verbose

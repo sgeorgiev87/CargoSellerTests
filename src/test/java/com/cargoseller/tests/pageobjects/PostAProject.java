@@ -1,14 +1,11 @@
 package com.cargoseller.tests.pageobjects;
 
-import org.openqa.selenium.By;
-import com.cargoseller.tests.browser.Browser;
-import com.cargoseller.tests.tools.*;
-
 import org.junit.Assert;
+import org.openqa.selenium.By;
 
-import com.cargoseller.tests.*;
-import com.cargoseller.tests.stepsdef.ShipperSteps;
-import com.cargoseller.tests.testingtests.Demo;
+import com.cargoseller.tests.browser.Browser;
+import com.cargoseller.tests.tools.Tools;
+import com.cargoseller.tests.tools.WaitTool;
 
 public class PostAProject {
 	

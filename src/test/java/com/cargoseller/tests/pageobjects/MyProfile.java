@@ -4,9 +4,6 @@ import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.cargoseller.tests.browser.Browser;
 import com.cargoseller.tests.tools.*;
@@ -32,7 +29,7 @@ public class MyProfile {
 	}
 
 	public void clickRecharge() {
-		WaitTool.waitForElement(Browser.instance, By.xpath("//div[@class='button-functions not-money']/button"), 3);
+		WaitTool.waitForElement(Browser.instance, By.xpath("//div[@class='button-functions ']/button"), 3);
 		Browser.instance.findElement(By.xpath("//div[@class='button-functions ']/button")).click();
 	}
 
@@ -53,8 +50,8 @@ public class MyProfile {
 		return packageToReload;
 	}
 
-	public void makePaymentWithCash() {
-		WaitTool.waitForElement(Browser.instance, By.xpath("//a[@data-type='cash']"), 5);
+	public void makePaymentWithCash() throws InterruptedException {
+		WaitTool.waitForElementPresent(Browser.instance, By.xpath("//div[@id='fre-payment-cash']//a"), 10);
 		Browser.instance.findElement(By.xpath("//a[@data-type='cash']")).click();
 		Browser.instance.findElement(By.linkText("Make Payment")).click();
 	}

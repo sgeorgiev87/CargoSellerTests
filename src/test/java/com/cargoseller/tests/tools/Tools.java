@@ -1,5 +1,7 @@
 package com.cargoseller.tests.tools;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 import org.openqa.selenium.By;
@@ -19,7 +21,7 @@ public class Tools {
 		}
 		return res.toString();
 	}
-	
+
 	public static String generateRandomLetters(int countOfLetters) {
 		String aToZ = "abcdefghijklmnopqrstuvwxyz";
 		Random rand = new Random();
@@ -31,13 +33,19 @@ public class Tools {
 		return res.toString();
 	}
 
-	public static boolean isElementPresent(By by){
-        try{
-        	Browser.instance.findElement(by);
-            return true;
-        }
-        catch(NoSuchElementException e){
-            return false;
-        }
-    }
+	public static boolean isElementPresent(By by) {
+		try {
+			Browser.instance.findElement(by);
+			return true;
+		} catch (NoSuchElementException e) {
+			return false;
+		}
+	}
+
+	public static String generateTestID() {
+		Date dNow = new Date();
+		SimpleDateFormat ft = new SimpleDateFormat("yyMMddHHmmss");
+		String testID = ft.format(dNow);
+		return testID;
+	}
 }

@@ -1,27 +1,32 @@
 package com.cargoseller.tests.stepsdef;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.Select;
 
+import java.io.IOException;
+
+import com.cargoseller.tests.browser.Browser;
 import com.cargoseller.tests.enums.Username;
 import com.cargoseller.tests.pageobjects.*;
+import com.cargoseller.tests.tools.DatabaseUtil;
+import com.cargoseller.tests.tools.Tools;
 
+import cucumber.api.java.After;
+import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import cucumber.api.PendingException;
-import cucumber.api.java.After;
 
 public class CarrierSteps extends CargoSellerTest{
 	
 	private Header header;
 	private Homepage homepage;
 	private Projects projects;
+	Browser browser = new Browser();
+	
+	@Before
+	public void setup() throws IOException {
+		browser.init();
+		testID = Tools.generateTestID();
+	}
 	
 	@Given("^the carrier is logged in$")
 	public void the_carrier_is_logged_in() throws Exception {
@@ -68,5 +73,11 @@ public class CarrierSteps extends CargoSellerTest{
 	@Then("^ensure the cargo is shown in the results$")
 	public void ensure_the_cargo_is_shown_in_the_results_() {
 	    projects.assertCargoFoundByTitle();
+	}
+	
+	@After
+	public void teardown() {
+		DatabaseUtil.saveTestResults(testID, username, password, projectTitle, projectDescription, projectCategory, projectSkill, projectBudget, projectCountry, withdrawalAmount, packageToReload);
+		Browser.instance.quit();
 	}
 }

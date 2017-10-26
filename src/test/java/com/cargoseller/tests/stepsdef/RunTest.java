@@ -8,5 +8,5 @@ import cucumber.api.junit.Cucumber;
 @RunWith(Cucumber.class)
 @CucumberOptions(plugin = {"progress", "html:target/cucumber-html-report"},
 				features = "src/test/resources/")
-public class CukesTestCS {
+public class RunTest {
 }

@@ -2,7 +2,6 @@ package com.cargoseller.tests.pageobjects;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 
 import com.cargoseller.tests.browser.Browser;
 import com.cargoseller.tests.tools.Tools;

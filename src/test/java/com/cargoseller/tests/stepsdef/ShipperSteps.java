@@ -1,21 +1,10 @@
 package com.cargoseller.tests.stepsdef;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-
-import org.junit.Assert;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.Select;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import gherkin.lexer.Id;
-import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 
@@ -36,7 +25,7 @@ public class ShipperSteps extends CargoSellerTest {
 	@Before
 	public void setup() throws IOException {
 		browser.init();
-		testID = Tools.generateRandomNumbers(5);
+		testID = Tools.generateTestID();
 	}
 
 	@Given("^the shipper is logged in$")
@@ -54,17 +43,17 @@ public class ShipperSteps extends CargoSellerTest {
 
 	@When("^he input \"([^\"]*)\" as a category$")
 	public void he_input_as_a_category(String category) {
-		this.category = postAProject.selectCategory(category);
+		this.projectCategory = postAProject.selectCategory(category);
 	}
 
 	@When("^random test title as a title$")
 	public void random_test_title_as_a_title() {
-		this.title = postAProject.inputTitle();
+		this.projectTitle = postAProject.inputTitle();
 	}
 
 	@When("^random description$")
 	public void random_description() {
-		this.description = postAProject.addDescription();
+		this.projectDescription = postAProject.addDescription();
 	}
 
 	@When("^attaches a file$")
@@ -74,17 +63,17 @@ public class ShipperSteps extends CargoSellerTest {
 
 	@When("^selects \"([^\"]*)\" as a skill$")
 	public void selects_as_a_skill(String skill) {
-		this.skill = postAProject.selectSkill(skill);
+		this.projectSkill = postAProject.selectSkill(skill);
 	}
 
 	@When("^enters a budget of \"([^\"]*)\"$")
 	public void enters_a_budget_of(double budget) {
-		this.budget = postAProject.enterBudget(budget);
+		this.projectBudget = postAProject.enterBudget(budget);
 	}
 
 	@When("^location is select as \"([^\"]*)\"$")
 	public void location_is_select_as(String country) {
-		this.country = postAProject.selectCountry(country);
+		this.projectCountry = postAProject.selectCountry(country);
 	}
 	
 	@When("^submits the project$")
@@ -94,7 +83,7 @@ public class ShipperSteps extends CargoSellerTest {
 
 	@Then("^ensure the project is posted successfully with all parameters correctly set$")
 	public void ensure_the_project_is_posted_successfully_with_all_parameters_correctly_set() throws Throwable {
-		postAProject.assertProjectPosted(this.category, this.title, this.description, this.skill, this.budget);
+		postAProject.assertProjectPosted(this.projectCategory, this.projectTitle, this.projectDescription, this.projectSkill, this.projectBudget);
 	}
 
 	@Given("^on MyProfile page$")
@@ -118,7 +107,7 @@ public class ShipperSteps extends CargoSellerTest {
 	}
 
 	@When("^makes the payment with Cash$")
-	public void makes_the_payment_with_Cash() {
+	public void makes_the_payment_with_Cash() throws InterruptedException {
 		myProfile.makePaymentWithCash();
 	}
 	
@@ -146,11 +135,6 @@ public class ShipperSteps extends CargoSellerTest {
 	public void ensure_the_withdrawal_request_is_made() throws Throwable {
 		myProfile.assertWithdrawalMade();
 	}
-
-	@When("^he posts a Cargo with \"([^\"]*)\" title$")
-	public void he_posts_a_Cargo_with_title(String arg1) throws Throwable {
-		
-	}
 	
 	@Given("^on the Freelancers page$")
 	public void on_the_Freelancers_page() throws Exception {
@@ -174,6 +158,7 @@ public class ShipperSteps extends CargoSellerTest {
 
 	@After
 	public void teardown() {
+		DatabaseUtil.saveTestResults(testID, username, password, projectTitle, projectDescription, projectCategory, projectSkill, projectBudget, projectCountry, withdrawalAmount, packageToReload);
 		Browser.instance.quit();
 	}
 }

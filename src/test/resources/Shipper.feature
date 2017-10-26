@@ -44,7 +44,7 @@ Scenario: Invite a Carrier to bid for your project
 	Given the shipper is logged in
 	And on the Freelancers page
 	When he selects carrier "Carrier Test"
-	And invites him to bid for cargo posted under number "2"
+	And invites him to bid for cargo posted under number "1"
 	Then ensure the invite has been sent
 	
 	
