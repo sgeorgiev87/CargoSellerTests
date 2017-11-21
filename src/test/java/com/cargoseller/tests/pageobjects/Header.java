@@ -14,28 +14,39 @@ public class Header {
 		Browser.instance.findElement(By.name("user_pass")).sendKeys(Credentials.getPassword(role.getUsername()));
 		Browser.instance.findElement(By.xpath("//div[@class='fre-input-field']/button")).click();
 		return new Homepage();
-		
+
 	}
-	
+
 	public PostAProject goToPostAProject() throws Exception {
 		Browser.instance.findElement(By.linkText("Post a Project")).click();
 		return new PostAProject();
 	}
-	
+
 	public MyProfile goToMyProfile() throws Exception {
 		Browser.instance.findElement(By.xpath("//div[@class='fre-account-info dropdown-toggle']/span")).click();
-		Browser.instance.findElement(By.xpath("(//a[contains(text(),'MY PROFILE')])[2]")).click();
+		Browser.instance.findElement(By.xpath("//a[contains(text(),'MY PROFILE')]")).click();
 		return new MyProfile();
 	}
-	
-	public Projects goToProjects() throws Exception {
+
+	public MyCredit goToMyCredit() throws Exception {
+		Browser.instance.findElement(By.xpath("//div[@class='fre-account-info dropdown-toggle']/span")).click();
+		Browser.instance.findElement(By.xpath("(//a[contains(text(),'My Credit')])[2]")).click();
+		return new MyCredit();
+	}
+
+	public Projects goToProjectsAsCarrier() throws Exception {
 		Browser.instance.findElement(By.linkText("PROJECTS")).click();
 		return new Projects();
+	}
+
+	public MyProjects goToMyProjectsAsShipper() throws Exception {
+		
+		return new MyProjects();
 	}
 
 	public Freelancers goToFreelancers() throws Exception {
 		Browser.instance.findElement(By.linkText("FREELANCERS")).click();
 		return new Freelancers();
 	}
-	
+
 }

@@ -4,13 +4,19 @@ public class CargoSellerTest {
 	
 	protected String testID;
 	protected String username;
-	protected String password;
 	protected String projectTitle;
+	protected String mainCategory1;
+	protected String mainCategory2;
+	protected String subCategory;
+	protected String length;
+	protected String height;
+	protected String width;
+	protected String weight;
+	protected String units;
+	protected String pickUpLocation;
+	protected String deliveryLocation;
 	protected String projectDescription;
-	protected String projectCategory;	
-	protected String projectSkill;
 	protected double projectBudget;
-	protected String projectCountry;
 	protected double withdrawalAmount;
 	protected String packageToReload;
 }

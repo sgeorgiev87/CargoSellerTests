@@ -9,8 +9,8 @@ import com.cargoseller.tests.tools.WaitTool;
 
 public class Projects {
 	private double budget;
-	private int deadlineDays;
 	private String cargoTitle;
+	private String vehiclePlateNumber;
 	
 	public Projects() throws Exception {
 		if (!isAt().equals("Projects | CargoSeller")) {
@@ -27,38 +27,40 @@ public class Projects {
 	}
 
 	
-	public void bidForProject(double budget, int deadlineDays) throws Exception {
-		if (Tools.isElementPresent(By.linkText("Bid"))) {
+	public void bidForProject(double budget, String vehiclePlateNumber) throws Exception {
+		if (Tools.isElementPresent(By.linkText("Bid"))) { 
 			this.budget = budget;
-			this.deadlineDays = deadlineDays;
+			this.vehiclePlateNumber = vehiclePlateNumber;
 			Browser.instance.findElement(By.linkText("Bid")).click();
 			Browser.instance.findElement(By.id("bid_budget")).sendKeys(Double.toString(budget));
-			Browser.instance.findElement(By.id("bid_time")).sendKeys(Integer.toString(deadlineDays));
 			Browser.instance.findElement(By.id("bid_content")).sendKeys(Tools.generateRandomLetters(15));
+			Browser.instance.findElement(By.xpath("//div[@id='vehicle_id_chosen']")).click();
+			Browser.instance.findElement(By.xpath("//li[text()='" + vehiclePlateNumber + "']")).click();
 			Browser.instance.findElement(By.xpath("//form[@id='bid_form']//button[@type='submit']")).click();
 		} else {
 			throw new Exception("You have already made a bid for this project.");
 		}
 	}
 	
-	public void cancelBid() throws Exception {
-		if (Tools.isElementPresent(By.xpath("//a[@title='Cancel this bidding']"))) {
-			Browser.instance.findElement(By.xpath("//a[@title='Cancel this bidding']")).click();
+	public void cancelBid() throws Exception { 
+		if (Browser.instance.findElement(By.xpath("//div[@class='project-detail-action']/a")).getText().equals("Cancel")) {
+			Browser.instance.findElement(By.xpath("//div[@class='project-detail-action']/a")).click();
+			WaitTool.waitForElement(Browser.instance, By.xpath("//form[@id='form-cancel-bid']//button"), 5);
+			Browser.instance.findElement(By.xpath("//form[@id='form-cancel-bid']//button")).click();
 		} else {
 			throw new Exception("You have never made a bid for this project.");
 		}
 	}
 	
-	public void assertBidSuccessful() {
-		WaitTool.waitForElement(Browser.instance, By.xpath("//span[@class='number-price']"), 8);		
-		Assert.assertEquals("The budget is different", Double.toString(this.budget) + "0€", Browser.instance.findElement(By.xpath("//span[@class='number-price']")).getText());
-		Assert.assertEquals("The days are different", "in " + Integer.toString(this.deadlineDays) + " days", Browser.instance.findElement(By.xpath("//span[@class='number-day']")).getText());
+	public void assertBidSuccessful() { 
+		Assert.assertEquals("The budget is different", Double.toString(this.budget) + "0€", Browser.instance.findElement(By.xpath("//div[@class='col-free-bid']/p[2]")).getText());
+		Assert.assertEquals("The vehicle is different", this.vehiclePlateNumber, Browser.instance.findElement(By.xpath("//div[@class='col-free-bid']/div/p")).getText());
 		
 	}
 	
 	public void assertBidCancelled() throws InterruptedException {
 		Thread.sleep(5000);
-		Assert.assertEquals("The bid was not cancelled", "Bid", Browser.instance.findElement(By.linkText("Bid")).getText());
+		Assert.assertEquals("The bid was not cancelled", "Bid", Browser.instance.findElement(By.xpath("//div[@class='project-detail-action']/a")).getText());
 	}
 	
 	public void searchForProjectByTitle(String cargoTitle) throws InterruptedException {

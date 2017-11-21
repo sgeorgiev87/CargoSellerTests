@@ -22,11 +22,11 @@ public class CarrierSteps extends CargoSellerTest{
 	private Projects projects;
 	Browser browser = new Browser();
 	
-	@Before
-	public void setup() throws IOException {
-		browser.init();
-		testID = Tools.generateTestID();
-	}
+//	@Before
+//	public void setup() throws IOException {
+//		browser.init();
+//		testID = Tools.generateTestID();
+//	}
 	
 	@Given("^the carrier is logged in$")
 	public void the_carrier_is_logged_in() throws Exception {
@@ -37,7 +37,7 @@ public class CarrierSteps extends CargoSellerTest{
 	
 	@Given("^on the projects page$")
 	public void on_the_projects_page() throws Exception {
-		projects = header.goToProjects();
+		projects = header.goToProjectsAsCarrier();
 	}
 
 	@When("^he selects available project number \"([^\"]*)\"$")
@@ -45,9 +45,9 @@ public class CarrierSteps extends CargoSellerTest{
 		projects.selectProject(projectNumber);
 	}
 
-	@When("^bids on it with \"([^\"]*)\" as Budget, \"([^\"]*)\" as Deadline days and Random Notes$")
-	public void bids_on_it_with_as_Budget_as_Deadline_days_and_Random_Notes(int budget, int deadlineDays) throws Throwable {
-		projects.bidForProject(budget, deadlineDays);
+	@When("^bids on it with \"([^\"]*)\" as Budget, \"([^\"]*)\" as plate number$")
+	public void bids_on_it_with_as_Budget_as_plate_number(int budget, String vehiclePlateNumber) throws Throwable {
+		projects.bidForProject(budget, vehiclePlateNumber);
 	}
 
 	@Then("^ensure the bid is successful$")
@@ -75,9 +75,9 @@ public class CarrierSteps extends CargoSellerTest{
 	    projects.assertCargoFoundByTitle();
 	}
 	
-	@After
-	public void teardown() {
-		DatabaseUtil.saveTestResults(testID, username, password, projectTitle, projectDescription, projectCategory, projectSkill, projectBudget, projectCountry, withdrawalAmount, packageToReload);
-		Browser.instance.quit();
-	}
+//	@After
+//	public void teardown() {
+//		DatabaseUtil.saveTestResults(testID, username, password, projectTitle, projectDescription, projectCategory, projectSkill, projectBudget, projectCountry, withdrawalAmount, packageToReload);
+//		Browser.instance.quit();
+//	}
 }

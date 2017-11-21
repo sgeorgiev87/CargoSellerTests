@@ -20,10 +20,12 @@ public class ShipperSteps extends CargoSellerTest {
 	private MyProfile myProfile;
 	private PostAProject postAProject;
 	private Freelancers freelancers;
+	private MyCredit myCredit;
 	Browser browser = new Browser();
 	
 	@Before
 	public void setup() throws IOException {
+		
 		browser.init();
 		testID = Tools.generateTestID();
 	}
@@ -41,29 +43,42 @@ public class ShipperSteps extends CargoSellerTest {
 		postAProject.isAt();
 	}
 
-	@When("^he input \"([^\"]*)\" as a category$")
-	public void he_input_as_a_category(String category) {
-		this.projectCategory = postAProject.selectCategory(category);
+	@When("^he selects \"([^\"]*)\" and \"([^\"]*)\" as a main categories$")
+	public void he_selects_and_as_a_main_categories(String category1, String category2) {
+		String array[] = postAProject.selectMainCategories(category1, category2);
+		this.mainCategory1 = array[0];
+		this.mainCategory2 = array[1];
 	}
 
-	@When("^random test title as a title$")
-	public void random_test_title_as_a_title() {
-		this.projectTitle = postAProject.inputTitle();
+	@When("^selects \"([^\"]*)\" as a sub-category$")
+	public void selects_as_a_subcategory(String subCategory) throws Throwable {
+		this.subCategory = postAProject.selectSubCategory(subCategory);
 	}
 
-	@When("^random description$")
-	public void random_description() {
-		this.projectDescription = postAProject.addDescription();
+	@When("^inputs random dimensions, weight and units in \"([^\"]*)\" and \"([^\"]*)\"$")
+	public void inputs_random_dimensions_weight_and_units_in(String lengthUnit, String weightUnit) throws Throwable {
+		String array[] = postAProject.inputDimensionsWeightAndUnit(lengthUnit, weightUnit);
+		this.length = array[0];
+		this.height = array[1];
+		this.width = array[2];
+		this.weight = array[3];
+		this.units = array[4];
 	}
 
-	@When("^attaches a file$")
-	public void attaches_a_file() {
-		postAProject.addAttachment();
+	@When("^selects pick-up location as \"([^\"]*)\"$")
+	public void selects_pickup_location_as(String pickupLocation) throws Throwable {
+		this.pickUpLocation = postAProject.selectPickupLocation(pickupLocation);
 	}
 
-	@When("^selects \"([^\"]*)\" as a skill$")
-	public void selects_as_a_skill(String skill) {
-		this.projectSkill = postAProject.selectSkill(skill);
+	@When("^selects delivery location as \"([^\"]*)\"$")
+	public void selects_delivery_location_as(String deliveryLocation) throws Throwable {
+		this.deliveryLocation = postAProject.selectDeliveryLocation(deliveryLocation);
+	}
+
+	@When("^selects pick-up date today with random description$")
+	public void selects_pickup_date_today_with_random_description() throws Throwable {
+		postAProject.selectPickupDateAsToday();
+		this.projectDescription = postAProject.randomProjectDescription();
 	}
 
 	@When("^enters a budget of \"([^\"]*)\"$")
@@ -71,11 +86,6 @@ public class ShipperSteps extends CargoSellerTest {
 		this.projectBudget = postAProject.enterBudget(budget);
 	}
 
-	@When("^location is select as \"([^\"]*)\"$")
-	public void location_is_select_as(String country) {
-		this.projectCountry = postAProject.selectCountry(country);
-	}
-	
 	@When("^submits the project$")
 	public void submits_the_project() {
 		postAProject.submitProject();
@@ -83,7 +93,9 @@ public class ShipperSteps extends CargoSellerTest {
 
 	@Then("^ensure the project is posted successfully with all parameters correctly set$")
 	public void ensure_the_project_is_posted_successfully_with_all_parameters_correctly_set() throws Throwable {
-		postAProject.assertProjectPosted(this.projectCategory, this.projectTitle, this.projectDescription, this.projectSkill, this.projectBudget);
+		String projectTitle = this.pickUpLocation + " -> " + this.deliveryLocation;
+		String categories = this.mainCategory1 + ", " + this.mainCategory2 + "," + this.subCategory;
+		postAProject.assertProjectPosted(projectTitle, categories, this.length, this.height, this.width, this.weight, this.units, this.projectBudget, this.projectDescription) ;
 	}
 
 	@Given("^on MyProfile page$")
@@ -92,48 +104,48 @@ public class ShipperSteps extends CargoSellerTest {
 	}
 	
 	@Given("^on the Credits page$")
-	public void on_the_Credits_page() {
-		myProfile.goToCredits();
+	public void on_the_Credits_page() throws Exception {
+		myCredit = header.goToMyCredit();
 	}
 
 	@When("^he clicks on Recharge$")
 	public void he_clicks_on_Recharge() throws Throwable {
-		myProfile.clickRecharge();
+		myCredit.deposit();
 	}
 
 	@When("^selects package \"([^\"]*)\"$")
 	public void selects_package(String packageToReload) {
-		this.packageToReload = myProfile.selectPackage(packageToReload);
+		this.packageToReload = myCredit.selectPackage(packageToReload);
 	}
 
 	@When("^makes the payment with Cash$")
 	public void makes_the_payment_with_Cash() throws InterruptedException {
-		myProfile.makePaymentWithCash();
+		myCredit.makePaymentWithCash();
 	}
 	
 	@When("^makes the payment with BrainTree$")
 	public void makes_the_payment_with_BrainTree() {
-		myProfile.makePaymentWithBrainTree();
+		myCredit.makePaymentWithBrainTree();
 	}
 
 	@Then("^ensure the payment is completed$")
 	public void ensure_the_payment_is_completed() {
-		myProfile.assertPaymentComplete();
+		myCredit.assertPaymentComplete();
 	}
 
 	@When("^he clicks on Withdraw$")
 	public void he_clicks_on_Withdraw() throws Throwable {
-		myProfile.clickWithdraw();
+		myCredit.clickWithdraw();
 	}
 
 	@When("^makes the withdrawal with amount of \"([^\"]*)\"$")
 	public void makes_the_withdrawal_with_amount_of(double amount) throws Exception {
-		this.withdrawalAmount = myProfile.makeWithdrawal(amount);
+		this.withdrawalAmount = myCredit.makeWithdrawal(amount);
 	}
 
 	@Then("^ensure the withdrawal request is made$")
 	public void ensure_the_withdrawal_request_is_made() throws Throwable {
-		myProfile.assertWithdrawalMade();
+		myCredit.assertWithdrawalMade();
 	}
 	
 	@Given("^on the Freelancers page$")
@@ -158,7 +170,7 @@ public class ShipperSteps extends CargoSellerTest {
 
 	@After
 	public void teardown() {
-		DatabaseUtil.saveTestResults(testID, username, password, projectTitle, projectDescription, projectCategory, projectSkill, projectBudget, projectCountry, withdrawalAmount, packageToReload);
+		DatabaseUtil.saveTestResults(testID, username, projectTitle, mainCategory1, mainCategory2, subCategory, length, height, width, weight, units, pickUpLocation, deliveryLocation, projectDescription, projectBudget, withdrawalAmount, packageToReload);
 		Browser.instance.quit();
 	}
 }

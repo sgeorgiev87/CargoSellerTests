@@ -31,12 +31,12 @@ public class Freelancers {
 
 	public void inviteToBidForCargoNumber(int cargoNumber) throws Exception {
 		this.cargoNumber = cargoNumber;
-		Browser.instance.findElement(By.linkText("Invite me to join")).click();
+		Browser.instance.findElement(By.linkText("Invite me")).click();
 		WaitTool.waitForElement(Browser.instance, By.id("submit_invite"), 4);
 		WebElement cargoToSelect = Browser.instance.findElement(By.xpath("//div[@id='mCSB_1_container']/div[" + Integer.toString(this.cargoNumber) + "]//label"));
 		this.cargoTitle = cargoToSelect.getText();
 		cargoToSelect.click();
-		Browser.instance.findElement(By.xpath("//div[@class='footer-invest']/button")).click();
+		Browser.instance.findElement(By.xpath("//form[@id='submit_invite']//button[@type='submit']")).click();
 	}
 
 	public void assertInviteToCarrierSent() { //this is not working - still trying to find a way to do it
