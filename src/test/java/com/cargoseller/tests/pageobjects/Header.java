@@ -18,7 +18,8 @@ public class Header {
 	}
 
 	public PostAProject goToPostAProject() throws Exception {
-		Browser.instance.findElement(By.linkText("Post a Project")).click();
+		Browser.instance.findElement(By.xpath("//li[@class='fre-menu-employer dropdown']")).click();
+		Browser.instance.findElement(By.linkText("POST A PROJECT")).click();
 		return new PostAProject();
 	}
 

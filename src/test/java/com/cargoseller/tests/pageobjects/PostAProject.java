@@ -3,7 +3,9 @@ package com.cargoseller.tests.pageobjects;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -21,64 +23,73 @@ public class PostAProject {
 			throw new Exception("Not on the Post A Project page");
 		}
 	}
-	
+
 	public String isAt() {
 		return Browser.instance.getTitle();
 	}
-	
-	public String[] selectMainCategories(String category1, String category2) {
-		String array[] = { category1, category2 };
+
+	public Map<String, String> selectMainCategories(String category1, String category2) {
+		Map<String, String> mainCategories = new HashMap<>();
+		mainCategories.put("Main Category 1", category1);
+		mainCategories.put("Main Category 2", category2);
 		WaitTool.waitForElement(Browser.instance,
 				By.xpath("//div[@id='fre-post-project']//div[@data-title='Household']"), 4);
 		Browser.instance.findElement(By.xpath("//div[@id='fre-post-project']//div[@data-title='" + category1 + "']"))
 				.click();
 		Browser.instance.findElement(By.xpath("//div[@id='fre-post-project']//div[@data-title='" + category2 + "']"))
 				.click();
-		return array;
+		return mainCategories;
 	}
+
 	public String selectSubCategory(String subCategory) {
 		Select select = new Select(Browser.instance.findElement(By.name("category_lvl3_id[0]")));
 		select.selectByVisibleText(subCategory);
 		return subCategory;
 	}
 
-	public String[] inputDimensionsWeightAndUnit(String lengthUnit, String weightUnit) throws Exception {
+	public Map<String, String> inputDimensionsWeightAndUnit(String lengthUnit, String weightUnit) throws Exception {
 		if (lengthUnit.equals("cm") && weightUnit.equals("kg")) {
-			String array[] = { Tools.generateRandomNumbers(3), Tools.generateRandomNumbers(3),
+			Map<String, String> projectMetrics = new HashMap<>();
+
+			String[] metricsToInput = { Tools.generateRandomNumbers(3), Tools.generateRandomNumbers(3),
 					Tools.generateRandomNumbers(3), Tools.generateRandomNumbers(2), Tools.generateRandomNumbers(1) };
 			Select length = new Select(Browser.instance.findElement(By.name("package_metrics[0]")));
 			length.selectByVisibleText("cm");
 			Select weight = new Select(Browser.instance.findElement(By.name("weight_metrics[0]")));
 			weight.selectByVisibleText("kg");
-			Browser.instance.findElement(By.name("lenght[0]")).sendKeys(array[0]);
-			Browser.instance.findElement(By.name("height[0]")).sendKeys(array[1]);
-			Browser.instance.findElement(By.name("width[0]")).sendKeys(array[2]);
-			Browser.instance.findElement(By.name("weight[0]")).sendKeys(array[3]);
-			Browser.instance.findElement(By.name("units[0]")).sendKeys(array[4]);
+			Browser.instance.findElement(By.name("lenght[0]")).sendKeys(metricsToInput[0]);
+			Browser.instance.findElement(By.name("height[0]")).sendKeys(metricsToInput[1]);
+			Browser.instance.findElement(By.name("width[0]")).sendKeys(metricsToInput[2]);
+			Browser.instance.findElement(By.name("weight[0]")).sendKeys(metricsToInput[3]);
+			Browser.instance.findElement(By.name("units[0]")).sendKeys(metricsToInput[4]);
 			Browser.instance.findElement(By.xpath("//button[@class='btn btn-info to-step-3']")).click();
-			array[0] = array[0] + lengthUnit;
-			array[1] = array[1] + lengthUnit;
-			array[2] = array[2] + lengthUnit;
-			array[3] = array[3] + weightUnit;
-			return array;
+			projectMetrics.put("length", metricsToInput[0] + lengthUnit);
+			projectMetrics.put("height", metricsToInput[1] + lengthUnit);
+			projectMetrics.put("width", metricsToInput[2] + lengthUnit);
+			projectMetrics.put("weight", metricsToInput[3] + weightUnit);
+			projectMetrics.put("units", metricsToInput[4]);
+			return projectMetrics;
 		} else if (lengthUnit.equals("in") && weightUnit.equals("lbs")) {
-			String array[] = { Tools.generateRandomNumbers(3), Tools.generateRandomNumbers(3),
+			Map<String, String> projectMetrics = new HashMap<>();
+
+			String[] metricsToInput = { Tools.generateRandomNumbers(3), Tools.generateRandomNumbers(3),
 					Tools.generateRandomNumbers(3), Tools.generateRandomNumbers(2), Tools.generateRandomNumbers(1) };
 			Select length = new Select(Browser.instance.findElement(By.name("package_metrics[0]")));
 			length.selectByVisibleText("in");
 			Select weight = new Select(Browser.instance.findElement(By.name("weight_metrics[0]")));
 			weight.selectByVisibleText("lbs");
-			Browser.instance.findElement(By.name("lenght[0]")).sendKeys(array[0]);
-			Browser.instance.findElement(By.name("height[0]")).sendKeys(array[1]);
-			Browser.instance.findElement(By.name("width[0]")).sendKeys(array[2]);
-			Browser.instance.findElement(By.name("weight[0]")).sendKeys(array[3]);
-			Browser.instance.findElement(By.name("units[0]")).sendKeys(array[4]);
+			Browser.instance.findElement(By.name("lenght[0]")).sendKeys(metricsToInput[0]);
+			Browser.instance.findElement(By.name("height[0]")).sendKeys(metricsToInput[1]);
+			Browser.instance.findElement(By.name("width[0]")).sendKeys(metricsToInput[2]);
+			Browser.instance.findElement(By.name("weight[0]")).sendKeys(metricsToInput[3]);
+			Browser.instance.findElement(By.name("units[0]")).sendKeys(metricsToInput[4]);
 			Browser.instance.findElement(By.xpath("//button[@class='btn btn-info to-step-3']")).click();
-			array[0] = array[0] + lengthUnit;
-			array[1] = array[1] + lengthUnit;
-			array[2] = array[2] + lengthUnit;
-			array[3] = array[3] + weightUnit;
-			return array;
+			projectMetrics.put("length", metricsToInput[0] + lengthUnit);
+			projectMetrics.put("height", metricsToInput[1] + lengthUnit);
+			projectMetrics.put("width", metricsToInput[2] + lengthUnit);
+			projectMetrics.put("weight", metricsToInput[3] + weightUnit);
+			projectMetrics.put("units", metricsToInput[4]);
+			return projectMetrics;
 		} else {
 			throw new Exception("The length and weight metrics do not match");
 		}
@@ -133,19 +144,18 @@ public class PostAProject {
 		;
 	}
 
-	public void assertProjectPosted(String projectTitle, String categories,
-			String length, String height, String width, String weight, String units, double projectBudget,
-			String projectDescription) {
+	public void assertProjectPosted(String projectTitle, String categories, String length, String height, String width,
+			String weight, String units, double projectBudget, String projectDescription) {
 		Assert.assertEquals("The project title doesn't match", projectTitle,
 				Browser.instance.findElement(By.xpath("//h1[@class='project-detail-title']")).getText());
-		
+
 		Browser.instance.findElement(By.xpath("//div[@id='item-category-0']/a")).click();
 		WaitTool.waitForElement(Browser.instance, By.xpath("//div[@class='col-md-12']//dd"), 5);
-		
+
 		Assert.assertEquals("One or more of the categories do not match", categories,
 				Browser.instance.findElement(By.xpath("//div[@class='col-md-12']//dd")).getText());
 		WaitTool.waitForElement(Browser.instance, By.xpath("//span[text()='Lenght:']/following-sibling::span"), 5);
-		Assert.assertEquals("The length doesn't match", length ,
+		Assert.assertEquals("The length doesn't match", length,
 				Browser.instance.findElement(By.xpath("//span[text()='Lenght:']/following-sibling::span")).getText());
 		Assert.assertEquals("The height doesn't match", height,
 				Browser.instance.findElement(By.xpath("//span[text()='Height:']/following-sibling::span")).getText());

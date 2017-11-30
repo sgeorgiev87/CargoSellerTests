@@ -4,6 +4,7 @@ public class CargoSellerTest {
 	
 	protected String testID;
 	protected String username;
+	protected double availableBalance;
 	protected String projectTitle;
 	protected String mainCategory1;
 	protected String mainCategory2;
